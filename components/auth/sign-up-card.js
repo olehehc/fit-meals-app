@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +14,14 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import signUpAction from "@/app/auth/sign-up/action";
 
 export default function SignUpCard() {
+  const [state, formAction, isPending] = useActionState(signUpAction, {
+    errors: null,
+    data: {},
+  });
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -22,34 +29,74 @@ export default function SignUpCard() {
         <CardDescription>Enter your details below to register</CardDescription>
       </CardHeader>
       <CardContent>
-        <form className="flex flex-col gap-6">
+        <form className="flex flex-col gap-6" noValidate action={formAction}>
           <div className="grid gap-2">
             <Label htmlFor="username">Username</Label>
             <Input
               id="username"
+              name="username"
               type="text"
-              placeholder="your username"
-              required
+              placeholder="username"
+              defaultValue={state.data?.username}
+              className={state.errors?.username && "border-destructive"}
             />
+            {state.errors?.username && (
+              <p className="text-xs text-destructive">
+                {state.errors.username}
+              </p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
+              name="email"
               type="email"
-              placeholder="you@example.com"
-              required
+              placeholder="m@example.com"
+              defaultValue={state.data?.email}
+              className={state.errors?.email && "border-destructive"}
             />
+            {state.errors?.email && (
+              <p className="text-xs text-destructive">{state.errors.email}</p>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required />
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              className={state.errors?.password && "border-destructive"}
+            />
+            {state.errors?.password && (
+              <ul
+                className={
+                  state.errors?.password.length > 1
+                    ? "text-xs text-destructive list-disc pl-5"
+                    : "text-xs text-destructive"
+                }
+              >
+                {state.errors?.password.map((error) => (
+                  <li key={error}>{error}</li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="grid gap-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
-            <Input id="confirmPassword" type="password" required />
+            <Input
+              id="confirmPassword"
+              name="confirmPassword"
+              type="password"
+              className={state.errors?.confirmPassword && "border-destructive"}
+            />
+            {state.errors?.confirmPassword && (
+              <p className="text-xs text-destructive">
+                {state.errors.confirmPassword}
+              </p>
+            )}
           </div>
-          <Button type="submit" className="w-full">
+          <Button type="submit" className="w-full" disabled={isPending}>
             Sign Up
           </Button>
         </form>
