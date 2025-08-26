@@ -13,7 +13,7 @@ import {
   isEmail,
 } from "@/lib/validation";
 
-export async function signUpAction(prevState, formData) {
+export default async function signUpAction(prevState, formData) {
   const errors = {};
 
   const data = {
@@ -24,35 +24,37 @@ export async function signUpAction(prevState, formData) {
   };
 
   if (!isNotEmpty(data.username)) {
-    errors.username = "Required field";
+    errors.username = "This field is required";
   } else if (!hasMinLength(data.username, 4)) {
-    errors.username = "Username has to have at least 4 characters";
+    errors.username = "Username must be at least 4 characters";
   } else if (!isAtMostLength(data.username, 20)) {
-    errors.username = "Username has to have 20 characters max";
+    errors.username = "Username cannot exceed 20 characters";
   }
 
   if (!isNotEmpty(data.email)) {
-    errors.email = "Required field";
+    errors.email = "This field is required";
   } else if (!isEmail(data.email)) {
-    errors.email = "Invalid email address";
+    errors.email = "Please enter a valid email address";
   }
 
   if (!isNotEmpty(data.password)) {
-    errors.password = ["Required field"];
+    errors.password = ["This field is required"];
   } else {
     const passwordErrors = [];
 
     if (!hasMinLength(data.password, 8)) {
-      passwordErrors.push("At least 8 characters long");
+      passwordErrors.push("Password must be at least 8 characters long");
     }
     if (!hasLetter(data.password)) {
-      passwordErrors.push("At least one letter");
+      passwordErrors.push("Password must contain at least one letter");
     }
     if (!hasNumber(data.password)) {
-      passwordErrors.push("At least one number");
+      passwordErrors.push("Password must contain at least one number");
     }
     if (!hasSpecialChar(data.password)) {
-      passwordErrors.push("At least one special character");
+      passwordErrors.push(
+        "Password must contain at least one special character"
+      );
     }
 
     if (passwordErrors.length > 0) {
@@ -61,13 +63,17 @@ export async function signUpAction(prevState, formData) {
   }
 
   if (!isNotEmpty(data.confirmPassword)) {
-    errors.confirmPassword = "Required field";
+    errors.confirmPassword = "This field is required";
   } else if (!isEqual(data.password, data.confirmPassword)) {
     errors.confirmPassword = "Passwords do not match";
   }
 
   if (Object.keys(errors).length > 0) {
-    return { errors };
+    return {
+      ok: false,
+      errors,
+      data,
+    };
   }
 
   redirect("/");
