@@ -1,7 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { hash } from "bcryptjs";
 
+import { createUser, getUserByEmail } from "@/lib/repository/users";
 import {
   isNotEmpty,
   hasMinLength,
@@ -76,5 +78,22 @@ export default async function signUpAction(prevState, formData) {
     };
   }
 
-  redirect("/");
+  const existingUser = getUserByEmail(data.email);
+  if (existingUser) {
+    return {
+      ok: false,
+      errors: { email: "User with this email already exists" },
+      data,
+    };
+  }
+
+  const hashedPassword = await hash(data.password, 10);
+
+  createUser({
+    username: data.username,
+    email: data.email,
+    password: hashedPassword,
+  });
+
+  redirect("/auth/sign-in");
 }
