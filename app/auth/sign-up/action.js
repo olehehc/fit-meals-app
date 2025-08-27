@@ -1,6 +1,5 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { hash } from "bcryptjs";
 
 import { createUser, getUserByEmail } from "@/lib/repository/users";
