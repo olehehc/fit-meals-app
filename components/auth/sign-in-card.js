@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,8 +15,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import signInAction from "@/app/auth/sign-in/action";
 
 export default function SignInCard() {
+  const [state, formAction, isPending] = useActionState(signInAction, {
+    errors: null,
+    data: {},
+  });
+
+  console.log(state);
+
   return (
     <Card className="w-full max-w-sm">
       <CardHeader>
@@ -30,16 +39,21 @@ export default function SignInCard() {
         </CardAction>
       </CardHeader>
       <CardContent>
-        <form>
+        <form noValidate action={formAction}>
           <div className="flex flex-col gap-6">
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
+                name="email"
                 type="email"
                 placeholder="m@example.com"
-                required
+                defaultValue={state.data?.email}
+                className={state.errors?.email && "border-destructive"}
               />
+              {state.errors?.email && (
+                <p className="text-xs text-destructive">{state.errors.email}</p>
+              )}
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -51,16 +65,28 @@ export default function SignInCard() {
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                className={state.errors?.password && "border-destructive"}
+              />
+              {state.errors?.password && (
+                <p className="text-xs text-destructive">
+                  {state.errors.password}
+                </p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <div className="flex items-center">
+                <Button type="submit" className="w-full" disabled={isPending}>
+                  Login
+                </Button>
+              </div>
             </div>
           </div>
         </form>
       </CardContent>
-      <CardFooter className="flex-col gap-2">
-        <Button type="submit" className="w-full">
-          Login
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
