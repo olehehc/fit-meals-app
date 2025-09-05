@@ -8,7 +8,7 @@ export default async function MainHeader() {
   const user = await getCurrentUser();
 
   return (
-    <header className="bg-black p-4 flex justify-between items-center">
+    <header className="fixed top-0 left-0 w-full z-50 bg-black p-4 flex justify-between items-center">
       <Link href="/" className="text-white text-xl font-bold">
         💪 FitMeals
       </Link>
