@@ -1,16 +1,20 @@
 "use client";
 
 import { useTransition } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
 import { signOut } from "@/lib/auth";
 
 export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   function handleLogout() {
-    startTransition(() => {
-      signOut();
+    if (isPending) return;
+    startTransition(async () => {
+      await signOut();
+      router.push("/");
     });
   }
 
@@ -18,7 +22,8 @@ export default function SignOutButton() {
     <Button
       onClick={handleLogout}
       disabled={isPending}
-      className="text-sm px-3 py-1 text-secondary"
+      variant="link"
+      className="text-sm px-3 py-1 text-secondary opacity-90 hover:opacity-100"
     >
       {isPending ? "Signing out..." : "Sign Out"}
     </Button>
