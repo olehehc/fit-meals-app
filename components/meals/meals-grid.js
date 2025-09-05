@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+
+import { Button } from "../ui/button";
 import MealItem from "./meal-item";
 import MealsPagination from "./meals-pagination";
 
@@ -15,6 +18,9 @@ export default function MealsGrid({ meals }) {
   return (
     <>
       <div className="w-full max-w-[1440px] mx-auto">
+        <Button asChild className="mb-6">
+          <Link href="/meals/share">Share Your Favorite Recipe</Link>
+        </Button>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 list-none p-0 m-0">
           {currentMeals.map((meal) => (
             <li key={meal.id}>
