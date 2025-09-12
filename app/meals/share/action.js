@@ -1,7 +1,14 @@
 "use server";
 
 import { getCurrentUser } from "@/lib/auth";
-import { isNotEmpty, hasMinLength, isAtMostLength } from "@/lib/validation";
+import {
+  isNotEmpty,
+  hasMinLength,
+  isAtMostLength,
+  isProvided,
+  isAtLeastSize,
+  isUnderSizeLimit,
+} from "@/lib/validation";
 import { saveMeal } from "@/lib/repository/meals";
 
 export default async function shareMealAction(prevState, formData) {
@@ -43,10 +50,14 @@ export default async function shareMealAction(prevState, formData) {
     errors.instructions = "Instructions must be at least 20 characters";
   }
 
-  if (!data.image) {
+  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
+  if (!isProvided(data.image)) {
     errors.image = "Image is required";
-  } else if (data.image.size === 0) {
+  } else if (!isAtLeastSize(data.image.size, 1)) {
     errors.image = "Image file is empty";
+  } else if (!isUnderSizeLimit(data.image.size, MAX_FILE_SIZE)) {
+    errors.image = "Image exceeds maximum size of 10MB";
   }
 
   if (Object.keys(errors).length > 0) {
