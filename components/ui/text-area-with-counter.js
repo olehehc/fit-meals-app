@@ -2,8 +2,20 @@ import { useState } from "react";
 
 import { Textarea } from "./textarea";
 
-export default function TextAreaWithCounter({ children, state, maxChars }) {
+export default function TextAreaWithCounter({
+  children,
+  state,
+  maxChars,
+  maxVH,
+}) {
   const [value, setValue] = useState(state.data?.instructions || "");
+
+  const maxHeightClass =
+    {
+      25: "max-h-[25vh]",
+      50: "max-h-[50vh]",
+      75: "max-h-[75vh]",
+    }[maxVH] || "max-h-[50vh]";
 
   return (
     <>
@@ -12,7 +24,9 @@ export default function TextAreaWithCounter({ children, state, maxChars }) {
         name="instructions"
         value={value}
         onChange={(e) => setValue(e.target.value.slice(0, maxChars))}
-        className={`${state.errors?.instructions ? "border-destructive" : ""}`}
+        className={`${maxHeightClass} ${
+          state.errors?.instructions ? "border-destructive" : ""
+        }`}
       />
       <div className="flex justify-between items-center mt-1">
         <div className="flex-1">{children}</div>
