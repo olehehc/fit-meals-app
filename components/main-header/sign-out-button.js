@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "../ui/button";
 import { signOut } from "@/lib/auth";
+import LoadingDots from "../ui/loading-dots";
 
 export default function SignOutButton() {
   const [isPending, startTransition] = useTransition();
@@ -25,7 +26,7 @@ export default function SignOutButton() {
       variant="link"
       className="text-sm px-3 py-1 text-secondary opacity-90 hover:opacity-100"
     >
-      {isPending ? "Signing out..." : "Sign Out"}
+      {isPending ? <LoadingDots /> : "Sign Out"}
     </Button>
   );
 }
