@@ -1,7 +1,6 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -10,50 +9,75 @@ import ImagePicker from "../../ui/image-picker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createExerciseAction } from "@/app/trainings/create-training/actions";
+import {
+  createExerciseAction,
+  updateExerciseAction,
+} from "@/app/trainings/create-training/actions";
 import ExerciseTypeDropdown from "./exercise-type-dropdown";
 import MuscleGroupDropdown from "./muscle-group-dropdown";
 
-export default function CreateExerciseCard({ onClose }) {
-  const router = useRouter();
-  const [state, formAction, isPending] = useActionState(createExerciseAction, {
-    errors: null,
-    data: {},
-  });
+export default function CreateExerciseCard({
+  onClose,
+  initialData,
+  onSuccess,
+}) {
+  const isEditMode = Boolean(initialData);
+
+  const [state, formAction, isPending] = useActionState(
+    isEditMode ? updateExerciseAction : createExerciseAction,
+    {
+      errors: null,
+      data: {},
+    }
+  );
 
   useEffect(() => {
     if (state.ok) {
-      toast("Exercise has successfully been created!");
+      toast(
+        isEditMode
+          ? "Exercise has successfully been updated!"
+          : "Exercise has successfully been created!"
+      );
       onClose();
+      if (onSuccess) onSuccess();
     }
-  }, [state.ok, onClose]);
+  }, [state.ok, onClose, onSuccess, isEditMode]);
 
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
-        <CardTitle>Add your exercise</CardTitle>
+        <CardTitle>
+          {isEditMode ? "Edit exercise" : "Add your exercise"}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-6" noValidate action={formAction}>
+          {isEditMode && (
+            <input type="hidden" name="id" value={initialData.id} />
+          )}
+
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
             <Input
               id="title"
               name="title"
               type="text"
-              defaultValue={state.data?.title}
+              defaultValue={initialData?.title || state.data?.title || ""}
               className={state.errors?.title && "border-destructive"}
             />
             {state.errors?.title && (
               <p className="text-xs text-destructive">{state.errors.title}</p>
             )}
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label>Exercise Type</Label>
               <ExerciseTypeDropdown
                 name="exerciseType"
-                defaultValue={state.data?.exerciseType}
+                defaultValue={
+                  initialData?.exerciseType || state.data?.exerciseType
+                }
                 className={state.errors?.exerciseType && "border-destructive"}
               />
               {state.errors?.exerciseType && (
@@ -66,7 +90,9 @@ export default function CreateExerciseCard({ onClose }) {
               <Label>Muscle Group</Label>
               <MuscleGroupDropdown
                 name="muscleGroup"
-                defaultValue={state.data?.muscleGroup}
+                defaultValue={
+                  initialData?.muscleGroup || state.data?.muscleGroup
+                }
                 className={state.errors?.muscleGroup && "border-destructive"}
               />
               {state.errors?.muscleGroup && (
@@ -76,9 +102,17 @@ export default function CreateExerciseCard({ onClose }) {
               )}
             </div>
           </div>
+
           <div className="grid gap-2">
             <Label htmlFor="instructions">Instructions</Label>
-            <TextAreaWithCounter state={state} maxChars={1000} maxVH={25}>
+            <TextAreaWithCounter
+              state={state}
+              maxChars={1000}
+              maxVH={25}
+              defaultValue={
+                initialData?.instructions || state.data?.instructions || ""
+              }
+            >
               {state.errors?.instructions && (
                 <p className="text-xs text-destructive">
                   {state.errors.instructions}
@@ -86,9 +120,16 @@ export default function CreateExerciseCard({ onClose }) {
               )}
             </TextAreaWithCounter>
           </div>
-          <ImagePicker label="Image" name="image" error={state.errors?.image} />
+
+          <ImagePicker
+            label="Image"
+            name="image"
+            error={state.errors?.image}
+            defaultValue={initialData?.image}
+          />
+
           <Button type="submit" className="w-full" disabled={isPending}>
-            Create Exercise
+            {isEditMode ? "Update Exercise" : "Create Exercise"}
           </Button>
         </form>
       </CardContent>
