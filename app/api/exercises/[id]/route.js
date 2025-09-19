@@ -11,7 +11,7 @@ export async function DELETE(req, { params }) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    const id = parseInt(params.id, 10);
+    const { id } = await params;
     if (isNaN(id)) {
       return new Response("Invalid ID", { status: 400 });
     }
@@ -22,8 +22,9 @@ export async function DELETE(req, { params }) {
       return new Response("Exercise not found or not yours", { status: 404 });
     }
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return Response.json({ success: true }, { status: 200 });
   } catch (error) {
+    console.error(error);
     return new Response("Server error", { status: 500 });
   }
 }
