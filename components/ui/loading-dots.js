@@ -1,6 +1,6 @@
 "use client";
 
-export default function LoadingDots({ size = 8, className = "", label = "" }) {
+export default function LoadingDots({ size = 8, className = "" }) {
   const dotSize = typeof size === "number" ? `${size}px` : size;
 
   return (
@@ -9,8 +9,6 @@ export default function LoadingDots({ size = 8, className = "", label = "" }) {
       aria-live="polite"
       className={`inline-flex items-center gap-3 ${className}`}
     >
-      <span className="sr-only">{label}</span>
-
       <div
         aria-hidden="true"
         className="inline-flex items-center gap-2 spinner-dots"
@@ -19,10 +17,6 @@ export default function LoadingDots({ size = 8, className = "", label = "" }) {
         <span className="spinner-dot" />
         <span className="spinner-dot" />
       </div>
-
-      <span aria-hidden="true" className="select-none">
-        {label}
-      </span>
 
       <style>{`
         @keyframes dotPulse {
