@@ -5,8 +5,14 @@ import { Label } from "./label";
 import { Input } from "./input";
 import { Button } from "./button";
 
-export default function ImagePicker({ label, name, error }) {
-  const [pickedImage, setPickedImage] = useState(null);
+export default function ImagePicker({
+  label,
+  name,
+  error,
+  defaultValue = "",
+  onChange,
+}) {
+  const [pickedImage, setPickedImage] = useState(defaultValue || null);
   const pickerRef = useRef();
 
   function handlePickClick() {
@@ -18,6 +24,7 @@ export default function ImagePicker({ label, name, error }) {
 
     if (!file) {
       setPickedImage(null);
+      if (pickerRef.current) pickerRef.current.value = "";
       return;
     }
 
@@ -25,6 +32,7 @@ export default function ImagePicker({ label, name, error }) {
 
     fileReader.onload = () => {
       setPickedImage(fileReader.result);
+      if (typeof onChange === "function") onChange(file);
     };
 
     fileReader.readAsDataURL(file);
