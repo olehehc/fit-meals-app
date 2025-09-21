@@ -13,22 +13,28 @@ import DraggableRowPreview from "@/components/trainings/exercises/exercises-tabl
 import DeleteConfirmDialog from "@/components/ui/delete-confirm-dialog";
 
 export default function CreateTrainingPage() {
+  // Create Exercise Modal
   const [isOpen, setIsOpen] = useState(false);
 
+  // Exercises Table
   const [exercises, setExercises] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Training Table
   const [droppedRows, setDroppedRows] = useState([]);
   const [activeRow, setActiveRow] = useState(null);
 
+  // Delete Exercise
   const [exerciseToDelete, setExerciseToDelete] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Edit Exercise
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [editingExercise, setEditingExercise] = useState(null);
 
   const [reloadExercises, setReloadExercises] = useState(false);
 
+  // Draggable Row
   const [previewCellWidths, setPreviewCellWidths] = useState(null);
   const [previewTableWidth, setPreviewTableWidth] = useState(null);
 
@@ -135,7 +141,11 @@ export default function CreateTrainingPage() {
     }
   }
 
-  const columns = createExercisesTableColumns({
+  function deleteTrainingTableRowHandler(rowId) {
+    setDroppedRows((prev) => prev.filter((row) => row.id !== rowId));
+  }
+
+  const exercisesTableColumns = createExercisesTableColumns({
     onEditOpen: handleEditOpen,
     onDelete: (exercise) => setExerciseToDelete(exercise),
   });
@@ -202,13 +212,14 @@ export default function CreateTrainingPage() {
         <div className="flex flex-row w-full justify-between">
           <ExercisesTable
             data={exercises}
-            columns={columns}
+            columns={exercisesTableColumns}
             isLoading={isLoading}
           />
           <div id="training-dropzone" className="w-[60%]">
             <TrainingTable
               droppedRows={droppedRows}
               setDroppedRows={setDroppedRows}
+              onDelete={deleteTrainingTableRowHandler}
             />
           </div>
         </div>
