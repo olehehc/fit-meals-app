@@ -1,3 +1,5 @@
+import { Input } from "@/components/ui/input";
+
 export default function getTrainingTableColumns(setRows) {
   return [
     { accessorKey: "title", header: "Title" },
@@ -7,9 +9,9 @@ export default function getTrainingTableColumns(setRows) {
       accessorKey: "sets",
       header: "Sets",
       cell: ({ row }) => (
-        <input
+        <Input
           type="number"
-          className="w-16 border rounded px-2"
+          className="h-8 w-16 border rounded px-2"
           value={row.original.sets || ""}
           onChange={(e) => {
             const newValue = e.target.value;
@@ -26,9 +28,9 @@ export default function getTrainingTableColumns(setRows) {
       accessorKey: "reps",
       header: "Reps",
       cell: ({ row }) => (
-        <input
+        <Input
           type="number"
-          className="w-16 border rounded px-2"
+          className="h-8 w-16 border rounded px-2"
           value={row.original.reps || ""}
           onChange={(e) => {
             const newValue = e.target.value;
