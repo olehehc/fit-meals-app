@@ -12,6 +12,7 @@ export default function ExercisesTableRow({ row }) {
   return (
     <TableRow
       ref={setNodeRef}
+      data-row-id={row.original.id.toString()}
       {...attributes}
       {...listeners}
       className={`cursor-grab select-none ${isDragging ? "opacity-50" : ""}`}
