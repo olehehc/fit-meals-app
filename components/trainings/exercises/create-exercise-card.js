@@ -45,9 +45,11 @@ export default function CreateExerciseCard({
           : "Exercise has successfully been created!"
       );
       onClose();
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        onSuccess(state.data);
+      }
     }
-  }, [state.ok, onClose, onSuccess, isEditMode]);
+  }, [state.ok, onClose, onSuccess, isEditMode, state.data]);
 
   const buttonText = isEditMode ? "Update Exercise" : "Create Exercise";
 
