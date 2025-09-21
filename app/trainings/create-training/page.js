@@ -29,6 +29,9 @@ export default function CreateTrainingPage() {
 
   const [reloadExercises, setReloadExercises] = useState(false);
 
+  const [previewCellWidths, setPreviewCellWidths] = useState(null);
+  const [previewTableWidth, setPreviewTableWidth] = useState(null);
+
   useEffect(() => {
     const controller = new AbortController();
     const signal = controller.signal;
@@ -57,12 +60,40 @@ export default function CreateTrainingPage() {
   }
 
   function handleDragStart(event) {
-    setActiveRow(event.active.data.current?.row || null);
+    const row = event.active.data.current?.row || null;
+    setActiveRow(row);
+
+    try {
+      const tr = document.querySelector(`[data-row-id="${event.active.id}"]`);
+      if (tr) {
+        const cells = Array.from(tr.children);
+        const widths = cells.map((c) =>
+          Math.round(c.getBoundingClientRect().width)
+        );
+        setPreviewCellWidths(widths);
+
+        const table = tr.closest("table");
+        if (table) {
+          setPreviewTableWidth(Math.round(table.getBoundingClientRect().width));
+        } else {
+          setPreviewTableWidth(null);
+        }
+      } else {
+        setPreviewCellWidths(null);
+        setPreviewTableWidth(null);
+      }
+    } catch (err) {
+      setPreviewCellWidths(null);
+      setPreviewTableWidth(null);
+    }
   }
 
   function handleDragEnd(event) {
     const { active, over } = event;
+
     setActiveRow(null);
+    setPreviewCellWidths(null);
+    setPreviewTableWidth(null);
 
     if (over && over.id === "training-dropzone") {
       const exercise = exercises.find((e) => e.id.toString() === active.id);
@@ -75,6 +106,8 @@ export default function CreateTrainingPage() {
 
   function handleDragCancel() {
     setActiveRow(null);
+    setPreviewCellWidths(null);
+    setPreviewTableWidth(null);
   }
 
   function handleEditOpen(exercise) {
@@ -181,7 +214,13 @@ export default function CreateTrainingPage() {
         </div>
 
         <DragOverlay dropAnimation={null}>
-          {activeRow ? <DraggableRowPreview row={activeRow} /> : null}
+          {activeRow ? (
+            <DraggableRowPreview
+              row={activeRow}
+              cellWidths={previewCellWidths}
+              tableWidth={previewTableWidth}
+            />
+          ) : null}
         </DragOverlay>
       </main>
     </DndContext>
