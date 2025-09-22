@@ -62,11 +62,11 @@ export default function TrainingTable({
   return (
     <div
       ref={setNodeRef}
-      className={`h-[70vh] overflow-hidden rounded-md border ${
+      className={`h-[70vh] overflow-y-auto overflow-x-auto rounded-md border shadow-md ${
         isOver ? "bg-blue-50" : ""
       }`}
     >
-      <Table>
+      <Table className="min-w-full">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
