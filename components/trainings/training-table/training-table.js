@@ -14,6 +14,7 @@ import {
 import { useDroppable } from "@dnd-kit/core";
 
 import TrainingTableRow from "./training-table-row";
+import SetRow from "./training-table-set-row";
 import getTrainingTableColumns from "./training-table-columns";
 
 export default function TrainingTable({
@@ -31,13 +32,25 @@ export default function TrainingTable({
 
   function setRowsWrapper(updater) {
     if (typeof updater === "function") {
-      setDroppedRows((prev) => {
-        const next = updater(prev);
-        return next;
-      });
+      setDroppedRows((prev) => updater(prev));
     } else {
       setDroppedRows(updater);
     }
+  }
+
+  function updateSet(exerciseId, setIndex, newValues) {
+    setDroppedRows((prev) =>
+      prev.map((row) =>
+        row.id === exerciseId
+          ? {
+              ...row,
+              sets: row.sets.map((s, i) =>
+                i === setIndex ? { ...s, ...newValues } : s
+              ),
+            }
+          : row
+      )
+    );
   }
 
   const table = useReactTable({
@@ -70,7 +83,18 @@ export default function TrainingTable({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TrainingTableRow key={row.id} row={row} />
+            <React.Fragment key={row.id}>
+              <TrainingTableRow row={row} />
+              {row.original.sets.map((setData, index) => (
+                <SetRow
+                  key={`${row.id}-set-${index}`}
+                  exerciseId={row.original.id}
+                  setIndex={index}
+                  setData={setData}
+                  updateSet={updateSet}
+                />
+              ))}
+            </React.Fragment>
           ))}
         </TableBody>
       </Table>
