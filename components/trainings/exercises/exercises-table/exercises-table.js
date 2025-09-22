@@ -23,7 +23,7 @@ export default function ExercisesTable({ columns, data, isLoading = false }) {
   });
 
   return (
-    <div className="w-[30%] h-[70vh] overflow-hidden rounded-md border">
+    <div className="w-[30%] h-[70vh] overflow-y-auto overflow-x-auto rounded-md border shadow-md">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
