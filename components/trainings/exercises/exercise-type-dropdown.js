@@ -16,9 +16,9 @@ export default function ExerciseTypeDropdown({ name, defaultValue }) {
   const [value, setValue] = useState(defaultValue ?? "");
 
   const types = [
-    { value: "strength", label: "Strength" },
-    { value: "cardio", label: "Cardio" },
-    { value: "stretching", label: "Stretching" },
+    { value: "Strength", label: "Strength" },
+    { value: "Cardio", label: "Cardio" },
+    { value: "Stretching", label: "Stretching" },
   ];
 
   const sortedTypes = [...types].sort((a, b) => a.label.localeCompare(b.label));
