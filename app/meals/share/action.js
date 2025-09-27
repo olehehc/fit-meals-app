@@ -19,8 +19,7 @@ export default async function shareMealAction(prevState, formData) {
   const errors = {};
 
   const data = {
-    creator: user.username,
-    creator_email: user.email,
+    user_id: user.id,
     title: formData.get("title"),
     calories: formData.get("calories"),
     protein: formData.get("protein"),
@@ -31,9 +30,9 @@ export default async function shareMealAction(prevState, formData) {
   if (!isNotEmpty(data.title)) {
     errors.title = "This field is required";
   } else if (!hasMinLength(data.title, 4)) {
-    errors.title = "Username must be at least 4 characters";
+    errors.title = "Title must be at least 4 characters";
   } else if (!isAtMostLength(data.title, 30)) {
-    errors.title = "Username cannot exceed 30 characters";
+    errors.title = "Title cannot exceed 30 characters";
   }
 
   if (!isNotEmpty(data.calories)) {
