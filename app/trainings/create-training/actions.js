@@ -11,7 +11,7 @@ import {
 } from "@/lib/validation";
 import {
   saveExercise,
-  updateExerciseByCreator,
+  updateExerciseByUserId,
 } from "@/lib/repository/exercises";
 
 export async function createExerciseAction(prevState, formData) {
@@ -20,8 +20,6 @@ export async function createExerciseAction(prevState, formData) {
   const errors = {};
 
   const data = {
-    creator: user.username,
-    creator_email: user.email,
     title: formData.get("title"),
     exercise_type: formData.get("exerciseType"),
     muscle_group: formData.get("muscleGroup"),
@@ -32,9 +30,9 @@ export async function createExerciseAction(prevState, formData) {
   if (!isNotEmpty(data.title)) {
     errors.title = "This field is required";
   } else if (!hasMinLength(data.title, 4)) {
-    errors.title = "Username must be at least 4 characters";
+    errors.title = "Title must be at least 4 characters";
   } else if (!isAtMostLength(data.title, 30)) {
-    errors.title = "Username cannot exceed 30 characters";
+    errors.title = "Title cannot exceed 30 characters";
   }
 
   if (!isNotEmpty(data.exercise_type)) {
@@ -69,7 +67,7 @@ export async function createExerciseAction(prevState, formData) {
     };
   }
 
-  await saveExercise(data);
+  await saveExercise(data, user.id);
 
   return { ok: true };
 }
@@ -80,8 +78,7 @@ export async function updateExerciseAction(prevState, formData, initialData) {
 
   const data = {
     id: formData.get("id"),
-    creator: user.username,
-    creator_email: user.email,
+    user_id: user.id,
     title: formData.get("title"),
     exercise_type: formData.get("exerciseType"),
     muscle_group: formData.get("muscleGroup"),
@@ -138,7 +135,7 @@ export async function updateExerciseAction(prevState, formData, initialData) {
     image: imageChanged ? data.image : undefined,
   };
 
-  const updated = await updateExerciseByCreator(data.id, user.email, payload);
+  const updated = await updateExerciseByUserId(data.id, user.id, payload);
   if (!updated) {
     return {
       ok: false,
