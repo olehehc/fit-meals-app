@@ -24,7 +24,7 @@ export default function SignOutButton() {
       onClick={handleLogout}
       disabled={isPending}
       variant="link"
-      className="text-sm px-3 py-1 text-secondary opacity-90 hover:opacity-100"
+      className="text-sm px-3 py-1 text-secondary opacity-90 hover:opacity-100 cursor-pointer"
     >
       {isPending ? <LoadingDots /> : "Sign Out"}
     </Button>
