@@ -1,5 +1,5 @@
 import {
-  deleteExerciseByCreator,
+  deleteExerciseByUserId,
   updateExerciseByUserId,
 } from "@/lib/repository/exercises";
 import { getCurrentUser } from "@/lib/auth";
@@ -16,7 +16,7 @@ export async function DELETE(req, { params }) {
       return new Response("Invalid ID", { status: 400 });
     }
 
-    const deleted = deleteExerciseByCreator(id, user.id);
+    const deleted = deleteExerciseByUserId(id, user.id);
 
     if (!deleted) {
       return new Response("Exercise not found or not yours", { status: 404 });
