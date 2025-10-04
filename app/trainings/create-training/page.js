@@ -11,10 +11,11 @@ import { createExercisesTableColumns } from "@/components/trainings/exercises/ex
 import TrainingTable from "@/components/trainings/training-table/training-table";
 import DraggableRowPreview from "@/components/trainings/exercises/exercises-table/draggable-row-preview";
 import DeleteConfirmDialog from "@/components/ui/delete-confirm-dialog";
+import SaveTrainingCard from "@/components/trainings/save-training-card";
 
 export default function CreateTrainingPage() {
   // Create Exercise Modal
-  const [isOpen, setIsOpen] = useState(false);
+  const [isExerciseModalOpen, setIsExerciseModalOpen] = useState(false);
 
   // Exercises Table
   const [exercises, setExercises] = useState([]);
@@ -37,6 +38,9 @@ export default function CreateTrainingPage() {
   // Draggable Row
   const [previewCellWidths, setPreviewCellWidths] = useState(null);
   const [previewTableWidth, setPreviewTableWidth] = useState(null);
+
+  // Save Training
+  const [isSaveTrainingModalOpen, setIsSaveTrainingModalOpen] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -62,7 +66,7 @@ export default function CreateTrainingPage() {
   }, [reloadExercises]);
 
   function handleClose() {
-    setIsOpen(false);
+    setIsExerciseModalOpen(false);
   }
 
   function handleDragStart(event) {
@@ -106,7 +110,7 @@ export default function CreateTrainingPage() {
       if (exercise && !droppedRows.some((r) => r.id === exercise.id)) {
         setDroppedRows((prev) => [
           ...prev,
-          { ...exercise, sets: [{ reps: 10, rest_period: 1 }] },
+          { ...exercise, sets: [{ reps: 10, rest_period: 1, weight: 0 }] },
         ]);
         console.log(droppedRows);
       }
@@ -142,8 +146,8 @@ export default function CreateTrainingPage() {
       console.error(err);
       alert("Error occurred while deleting. Reload page and try again later.");
     } finally {
-      setExerciseToDelete(null);
       setIsDeleting(false);
+      setExerciseToDelete(null);
     }
   }
 
@@ -166,7 +170,9 @@ export default function CreateTrainingPage() {
         <div className="flex w-full gap-6">
           <div className="w-[30%] min-w-0">
             <div className="mb-6">
-              <Button onClick={() => setIsOpen(true)}>Add new exercise</Button>
+              <Button onClick={() => setIsExerciseModalOpen(true)}>
+                Add new exercise
+              </Button>
             </div>
             <ExercisesTable
               data={exercises}
@@ -176,7 +182,12 @@ export default function CreateTrainingPage() {
           </div>
           <div className="w-[60%] ml-auto min-w-0">
             <div className="mb-6">
-              <Button>Save training</Button>
+              <Button
+                onClick={() => setIsSaveTrainingModalOpen(true)}
+                disabled={droppedRows.length === 0}
+              >
+                Save training
+              </Button>
             </div>
             <div id="training-dropzone" className="w-full">
               <TrainingTable
@@ -188,7 +199,7 @@ export default function CreateTrainingPage() {
           </div>
         </div>
 
-        {isOpen && (
+        {isExerciseModalOpen && (
           <Modal onClose={handleClose}>
             <CreateExerciseCard
               onClose={handleClose}
@@ -222,6 +233,15 @@ export default function CreateTrainingPage() {
                 );
               }}
               initialData={editingExercise}
+            />
+          </Modal>
+        )}
+
+        {isSaveTrainingModalOpen && (
+          <Modal onClose={() => setIsSaveTrainingModalOpen(false)}>
+            <SaveTrainingCard
+              trainingData={droppedRows}
+              onClose={() => setIsSaveTrainingModalOpen(false)}
             />
           </Modal>
         )}
