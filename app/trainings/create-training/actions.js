@@ -13,6 +13,7 @@ import {
   saveExercise,
   updateExerciseByUserId,
 } from "@/lib/repository/exercises";
+import { saveTraining } from "@/lib/repository/trainings";
 
 export async function createExerciseAction(prevState, formData) {
   const user = await getCurrentUser();
@@ -78,7 +79,6 @@ export async function updateExerciseAction(prevState, formData, initialData) {
 
   const data = {
     id: formData.get("id"),
-    user_id: user.id,
     title: formData.get("title"),
     exercise_type: formData.get("exerciseType"),
     muscle_group: formData.get("muscleGroup"),
@@ -145,4 +145,41 @@ export async function updateExerciseAction(prevState, formData, initialData) {
   }
 
   return { ok: true, data: updated };
+}
+
+export async function saveTrainingAction(trainingData, prevState, formData) {
+  const user = await getCurrentUser();
+  const errors = {};
+
+  const data = {
+    title: formData.get("title"),
+    training_date: formData.get("date"),
+    training: [...trainingData],
+  };
+
+  console.log("save training action: ", data.training_date);
+
+  if (!isNotEmpty(data.title)) {
+    errors.title = "This field is required";
+  } else if (!hasMinLength(data.title, 4)) {
+    errors.title = "Title must be at least 4 characters";
+  } else if (!isAtMostLength(data.title, 30)) {
+    errors.title = "Title cannot exceed 30 characters";
+  }
+
+  if (!isNotEmpty(data.training_date)) {
+    errors.training_date = "This field is required";
+  }
+
+  if (Object.keys(errors).length > 0) {
+    return {
+      ok: false,
+      errors,
+      data,
+    };
+  }
+
+  await saveTraining(data, user.id);
+
+  return { ok: true };
 }
