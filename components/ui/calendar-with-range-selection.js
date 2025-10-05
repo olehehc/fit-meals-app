@@ -1,13 +1,6 @@
-"use client";
-import { useState } from "react";
-
 import { Calendar } from "@/components/ui/calendar";
 
-export function CalendarWithRangeSelection() {
-  const [dateRange, setDateRange] = useState(() => ({
-    from: new Date(2025, 5, 9),
-    to: new Date(2025, 5, 26),
-  }));
+export function CalendarWithRangeSelection({ dateRange, setDateRange }) {
   return (
     <Calendar
       mode="range"
