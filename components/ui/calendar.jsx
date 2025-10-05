@@ -10,6 +10,7 @@ import { DayPicker, getDefaultClassNames } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
+import { formatDateToYMD } from "@/lib/utils";
 
 function Calendar({
   className,
@@ -183,13 +184,7 @@ function CalendarDayButton({ className, day, modifiers, ...props }) {
       ref={ref}
       variant="ghost"
       size="icon"
-      data-day={
-        day.date
-          ? `${day.date.getFullYear()}-${String(
-              day.date.getMonth() + 1
-            ).padStart(2, "0")}-${String(day.date.getDate()).padStart(2, "0")}`
-          : ""
-      }
+      data-day={day.date ? formatDateToYMD(day.date) : ""}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&
