@@ -35,7 +35,7 @@ export default function ExercisesTable({ columns, data, isLoading = false }) {
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
-                    className="first:rounded-tl-md last:rounded-tr-md sticky top-0 z-10"
+                    className="first:rounded-tl-md last:rounded-tr-md sticky top-0 z-10 whitespace-normal break-words"
                   >
                     {header.isPlaceholder
                       ? null
