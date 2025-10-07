@@ -1,14 +1,23 @@
+import { useRouter } from "next/navigation";
+
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button } from "../ui/button";
 
 export default function TrainingItem({
+  trainingSlug,
   trainingId,
   title,
   trainingDate,
   onDelete,
 }) {
+  const router = useRouter();
+
+  function handleEdit() {
+    router.push(`/trainings/${trainingSlug}/edit?trainingId=${trainingId}`);
+  }
+
   return (
     <div className="bg-white w-full rounded-md border shadow-sm p-4 flex flex-row items-center justify-between w-xl">
       <div>
@@ -19,7 +28,7 @@ export default function TrainingItem({
         <Button title="Start training" variant="outline">
           <PlayArrowIcon />
         </Button>
-        <Button title="Edit training" variant="outline">
+        <Button title="Edit training" variant="outline" onClick={handleEdit}>
           <EditIcon />
         </Button>
         <Button
