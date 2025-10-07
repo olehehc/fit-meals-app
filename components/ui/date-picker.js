@@ -13,9 +13,15 @@ import {
 } from "@/components/ui/popover";
 import { formatDateToYMD } from "@/lib/utils";
 
-export default function DatePicker({ label, id, name, error }) {
+export default function DatePicker({ label, id, name, error, defaultValue }) {
   const [open, setOpen] = useState(false);
-  const [date, setDate] = useState(undefined);
+  const [date, setDate] = useState(
+    defaultValue
+      ? typeof defaultValue === "string"
+        ? new Date(defaultValue)
+        : defaultValue
+      : undefined
+  );
   const labelId = `${id}-label`;
 
   return (
