@@ -6,6 +6,7 @@ export default function TrainingsList({ trainings, onDelete }) {
       {trainings.map((training) => (
         <li key={training.id}>
           <TrainingItem
+            trainingSlug={training.slug}
             trainingId={training.id}
             onDelete={onDelete}
             title={training.title}
