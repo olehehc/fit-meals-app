@@ -8,16 +8,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { saveTrainingAction } from "@/app/trainings/create-training/actions";
 import LoadingDots from "@/components/ui/loading-dots";
 import DatePicker from "../ui/date-picker";
 
-export default function SaveTrainingCard({ trainingData, onClose }) {
+export default function TrainingActionCard({
+  trainingTitle,
+  trainingDate,
+  trainingData,
+  onClose,
+  action,
+  cardTitle,
+  submitButtonTitle
+}) {
   const router = useRouter();
 
   const [state, formAction, isPending] = useActionState(
-    (prevState, formData) =>
-      saveTrainingAction(trainingData, prevState, formData),
+    (prevState, formData) => action(trainingData, prevState, formData),
     {
       errors: null,
       data: {},
@@ -35,7 +41,7 @@ export default function SaveTrainingCard({ trainingData, onClose }) {
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
-        <CardTitle>Save your training</CardTitle>
+        <CardTitle>{cardTitle}</CardTitle>
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-6" noValidate action={formAction}>
@@ -45,7 +51,7 @@ export default function SaveTrainingCard({ trainingData, onClose }) {
               id="title"
               name="title"
               type="text"
-              defaultValue={state.data?.title || ""}
+              defaultValue={state.data?.title || trainingTitle || ""}
               className={state.errors?.title && "border-destructive"}
             />
             {state.errors?.title && (
@@ -58,6 +64,7 @@ export default function SaveTrainingCard({ trainingData, onClose }) {
               id="date"
               name="date"
               label="Training Date"
+              defaultValue={trainingDate}
               error={state.errors?.training_date && "border-destructive"}
             />
             {state.errors?.training_date && (
@@ -68,7 +75,7 @@ export default function SaveTrainingCard({ trainingData, onClose }) {
           </div>
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? <LoadingDots /> : "Save"}
+            {isPending ? <LoadingDots /> : submitButtonTitle}
           </Button>
         </form>
       </CardContent>
