@@ -73,7 +73,7 @@ export default function TrainingTable({
                 {headerGroup.headers.map((header, i) => (
                   <TableHead
                     key={header.id}
-                    className="first:rounded-tl-md last:rounded-tr-md"
+                    className="first:rounded-tl-md last:rounded-tr-md whitespace-normal break-words"
                   >
                     {flexRender(
                       header.column.columnDef.header,
