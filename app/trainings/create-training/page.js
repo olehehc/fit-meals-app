@@ -11,7 +11,8 @@ import { createExercisesTableColumns } from "@/components/trainings/exercises/ex
 import TrainingTable from "@/components/trainings/training-table/training-table";
 import DraggableRowPreview from "@/components/trainings/exercises/exercises-table/draggable-row-preview";
 import DeleteConfirmDialog from "@/components/ui/delete-confirm-dialog";
-import SaveTrainingCard from "@/components/trainings/save-training-card";
+import TrainingActionCard from "@/components/trainings/training-action-card";
+import { saveTrainingAction } from "@/app/trainings/create-training/actions";
 
 export default function CreateTrainingPage() {
   // Create Exercise Modal
@@ -112,7 +113,6 @@ export default function CreateTrainingPage() {
           ...prev,
           { ...exercise, sets: [{ reps: 10, rest_period: 1, weight: 0 }] },
         ]);
-        console.log(droppedRows);
       }
     }
   }
@@ -239,9 +239,12 @@ export default function CreateTrainingPage() {
 
         {isSaveTrainingModalOpen && (
           <Modal onClose={() => setIsSaveTrainingModalOpen(false)}>
-            <SaveTrainingCard
+            <TrainingActionCard
               trainingData={droppedRows}
               onClose={() => setIsSaveTrainingModalOpen(false)}
+              action={saveTrainingAction}
+              cardTitle={"Save your training"}
+              submitButtonTitle={"Save"}
             />
           </Modal>
         )}
