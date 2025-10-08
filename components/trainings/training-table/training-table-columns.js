@@ -68,7 +68,7 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const sets = row.original.sets || [];
         if (sets.length === 0) return null;
 
-        const repsValues = sets.map((set) => set.reps);
+        const repsValues = sets.map((set) => Number(set.reps));
         const sum = repsValues.reduce((acc, val) => acc + val, 0);
 
         return <span>{sum}</span>;
@@ -82,10 +82,10 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         if (sets.length === 0) return null;
 
         const volume = sets.reduce(
-          (acc, set) => acc + set.reps * set.weight,
+          (acc, set) => acc + Number(set.reps) * Number(set.weight),
           0
         );
-        return <span>{volume} kg</span>;
+        return <span>{Math.round(volume * 10) / 10} kg</span>;
       },
     },
     {
@@ -95,7 +95,7 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const sets = row.original.sets || [];
         if (sets.length === 0) return null;
 
-        const restPeriodValues = sets.map((set) => set.rest_period);
+        const restPeriodValues = sets.map((set) => Number(set.rest_period));
         const sum = restPeriodValues.reduce((acc, val) => acc + val, 0);
 
         return <span>{sum} min</span>;
