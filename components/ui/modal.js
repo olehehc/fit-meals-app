@@ -1,8 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { createPortal } from "react-dom";
+import { useState, useEffect } from "react";
 
 export default function Modal({ children, onClose }) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     const handleEsc = (e) => {
       if (e.key === "Escape") onClose();
@@ -15,12 +22,15 @@ export default function Modal({ children, onClose }) {
     if (e.target === e.currentTarget) onClose();
   };
 
-  return (
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       onClick={handleBackdropClick}
       className="fixed inset-0 bg-black/50 flex justify-center items-center z-50"
     >
       {children}
-    </div>
+    </div>,
+    document.body
   );
 }
