@@ -25,7 +25,6 @@ export default function SetRow({
           className="h-8 w-16"
           onChange={(e) => {
             let raw = e.target.value.replace(",", ".");
-            console.log("[Parent] onChange raw", { raw, reps });
 
             if (raw === "") {
               updateSet(exerciseId, setIndex, { reps: "0" });
@@ -57,7 +56,6 @@ export default function SetRow({
           min={0}
           onChange={(e) => {
             let raw = e.target.value.replace(",", ".");
-            console.log("[Parent] onChange raw", { raw, weight });
 
             if (raw === "") {
               updateSet(exerciseId, setIndex, { weight: "0" });
@@ -90,7 +88,6 @@ export default function SetRow({
           min={0}
           onChange={(e) => {
             let raw = e.target.value.replace(",", ".");
-            console.log("[Parent] onChange raw", { raw, rest_period });
 
             if (raw === "") {
               updateSet(exerciseId, setIndex, { rest_period: "0" });
