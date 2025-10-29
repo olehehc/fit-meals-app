@@ -1,5 +1,7 @@
 import TrainingSession from "@/components/sessions/trainings/training-session";
+import TrainingSessionResults from "@/components/sessions/trainings/training-session-results";
 import { getCurrentUser } from "@/lib/auth";
+import { getTrainingSessionByUserAndTrainingId } from "@/lib/repository/sessions";
 import { getTrainingAndTrainingSetsByUserAndTrainingId } from "@/lib/repository/trainings";
 
 export default async function TrainingSessionPage({ searchParams }) {
@@ -22,10 +24,19 @@ export default async function TrainingSessionPage({ searchParams }) {
     throw new Error("Training not found");
   }
 
+  let trainingSessionData;
+
+  if (trainingData.completed) {
+    trainingSessionData = await getTrainingSessionByUserAndTrainingId(
+      trainingId,
+      user.id
+    );
+  }
+
   return (
     <main className="flex flex-col items-center justify-start pt-[92px] p-6 bg-gray-50 flex-1">
       {trainingData.completed ? (
-        <p>Training Results</p>
+        <TrainingSessionResults trainingSessionData={trainingSessionData} />
       ) : (
         <TrainingSession training={trainingData} userId={user.id} />
       )}
