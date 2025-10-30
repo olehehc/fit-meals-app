@@ -1,8 +1,6 @@
 import Link from "next/link";
-
-import NavLink from "./nav-link";
-import SignOutButton from "./sign-out-button";
 import { getCurrentUser } from "@/lib/auth";
+import Navigation from "./navigation";
 
 export default async function MainHeader() {
   const user = await getCurrentUser();
@@ -12,16 +10,7 @@ export default async function MainHeader() {
       <Link href="/" className="text-white text-xl font-bold">
         💪 FitMeals
       </Link>
-      <nav className="flex gap-4">
-        <NavLink href="/">Home</NavLink>
-        <NavLink href="/trainings">Trainings</NavLink>
-        <NavLink href="/meals">Browse Meals</NavLink>
-        {user ? (
-          <SignOutButton />
-        ) : (
-          <NavLink href="/auth/sign-in">Sign In</NavLink>
-        )}
-      </nav>
+      <Navigation user={user} />
     </header>
   );
 }
