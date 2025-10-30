@@ -1,13 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import ExercisesList from "../exercises/exercises-list";
 import { saveTrainingSession as saveTrainingSessionOnServer } from "@/lib/repository/sessions";
 import LoadingDots from "@/components/ui/loading-dots";
+import { toast } from "sonner";
 
 export default function TrainingSession({ training, userId }) {
+  const router = useRouter();
+
   const [trainingSession, setTrainingSession] = useState(() => ({
     ...training,
     exercises: training.exercises.map((exercise) => ({
@@ -45,7 +49,8 @@ export default function TrainingSession({ training, userId }) {
 
     try {
       await saveTrainingSessionOnServer(trainingSession, userId);
-      console.log("Training session saved");
+      toast("🏆 Your training session has been successfully completed!");
+      router.refresh();
     } catch (error) {
       setErrorMessage(
         error.message ||
