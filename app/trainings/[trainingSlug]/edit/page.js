@@ -14,7 +14,9 @@ import DraggableRowPreview from "@/components/trainings/exercises/exercises-tabl
 import DeleteConfirmDialog from "@/components/ui/delete-confirm-dialog";
 import TrainingActionCard from "@/components/trainings/training-action-card";
 import { updateTrainingAction } from "./actions";
-import LoadingDots from "@/components/ui/loading-dots";
+import { getCurrentUser } from "@/lib/auth";
+import { getTrainingAndTrainingSetsBySlug } from "@/lib/repository/trainings";
+import Link from "next/link";
 
 export default function EditTrainingPage() {
   const { trainingSlug } = useParams();
@@ -48,15 +50,21 @@ export default function EditTrainingPage() {
 
     async function loadTraining() {
       setLoading(true);
+
+      const user = await getCurrentUser();
+
       try {
-        const res = await fetch(`/api/trainings/${trainingSlug}`, { signal });
-        if (!res.ok) throw new Error("Fetch failed");
-        const data = await res.json();
+        const data = await getTrainingAndTrainingSetsBySlug(
+          trainingSlug,
+          user.id
+        );
+        if (!data) throw new Error("Fetch failed");
 
         setDroppedRows(data.exercises);
         setTrainingData({
           slug: trainingSlug,
           title: data.title,
+          completed: data.completed,
           trainingDate: data.training_date,
           training: data.exercises,
         });
@@ -185,6 +193,24 @@ export default function EditTrainingPage() {
     },
     onDelete: (exercise) => setExerciseToDelete(exercise),
   });
+
+  if (trainingData.completed)
+    return (
+      <main className="flex-1 pt-[92px] p-6 bg-gray-50 flex items-center justify-center">
+        <div className="max-w-md w-full bg-white shadow-md rounded-xl p-6 text-center">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Training Completed
+          </h2>
+          <p className="text-gray-600 mb-6">
+            This training has already been completed. You can&apos;t make any
+            changes.
+          </p>
+          <Button asChild>
+            <Link href="/trainings">Back to Trainings</Link>
+          </Button>
+        </div>
+      </main>
+    );
 
   return (
     <DndContext
