@@ -51,10 +51,10 @@ export default function Navigation({ user }) {
                   <Link href="/meals">Browse Meals</Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
-                  <Link href="#">My Meals</Link>
+                  <Link href="/meals/my-meals">My Meals</Link>
                 </NavigationMenuLink>
                 <NavigationMenuLink asChild>
-                  <Link href="#">My Favorite Meals</Link>
+                  <Link href="/meals/favorites">My Favorite Meals</Link>
                 </NavigationMenuLink>
               </li>
             </ul>
