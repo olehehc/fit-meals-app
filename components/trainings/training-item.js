@@ -26,7 +26,7 @@ export default function TrainingItem({
   }
 
   return (
-    <div className="w-full rounded-md border shadow-sm p-4 flex flex-row items-center justify-between w-xl">
+    <div className="w-full bg-white rounded-md border shadow-sm p-4 flex flex-row items-center justify-between w-xl">
       <div>
         <h2 className="text-lg font-semibold">{title}</h2>
         <p className="text-sm text-gray-500">
