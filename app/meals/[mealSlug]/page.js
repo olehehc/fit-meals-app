@@ -1,0 +1,59 @@
+"use server";
+
+import { Textarea } from "@/components/ui/textarea";
+import { getCurrentUser } from "@/lib/auth";
+import { getMeal } from "@/lib/repository/meals";
+import Image from "next/image";
+
+export default async function MealPage({ params }) {
+  const { mealSlug } = await params;
+
+  const user = await getCurrentUser();
+  const meal = await getMeal(mealSlug, user?.id);
+
+  if (!meal) {
+    return (
+      <main className="flex flex-1 items-center justify-center pt-[92px] p-6 bg-gray-50">
+        <p className="text-muted-foreground text-lg">Meal not found.</p>
+      </main>
+    );
+  }
+
+  return (
+    <main className="flex flex-1 pt-[92px] p-6 bg-gray-50 justify-center">
+      <div className="flex flex-col gap-6 max-w-5xl w-full">
+        <div className="flex flex-col lg:flex-row gap-6 items-center lg:items-start">
+          <div className="relative w-full sm:w-[400px] md:w-[500px] lg:w-[640px] aspect-video rounded-md overflow-hidden">
+            <Image
+              src={meal.image}
+              alt={`${meal.title} blurred`}
+              fill
+              className="object-cover blur-xl scale-110 brightness-75"
+            />
+            <Image
+              src={meal.image}
+              alt={meal.title}
+              fill
+              className="object-contain relative z-10"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2 text-center lg:text-left">
+            <h1 className="text-2xl font-semibold">{meal.title}</h1>
+            <p className="text-sm text-muted-foreground">by {meal.username}</p>
+            <p className="text-sm text-muted-foreground">
+              Calories: {meal.calories} kcal
+            </p>
+            <p className="text-sm text-muted-foreground">
+              Protein: {meal.protein} g
+            </p>
+          </div>
+        </div>
+
+        <div className="p-4 bg-white rounded-md border whitespace-pre-line text-sm sm:text-base">
+          {meal.instructions}
+        </div>
+      </div>
+    </main>
+  );
+}
