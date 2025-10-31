@@ -19,7 +19,7 @@ export default function MealsGrid({ meals }) {
     <>
       <div className="w-full max-w-[1440px] mx-auto">
         <Button asChild className="mb-6">
-          <Link href="/meals/share">Share Your Favorite Recipe</Link>
+          <Link href="/meals/share">Share Your Recipe</Link>
         </Button>
         <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 list-none p-0 m-0">
           {currentMeals.map((meal) => (
