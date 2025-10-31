@@ -14,8 +14,6 @@ import { saveMeal } from "@/lib/repository/meals";
 export default async function shareMealAction(prevState, formData) {
   const user = await getCurrentUser();
 
-  console.log(user);
-
   const errors = {};
 
   const data = {
