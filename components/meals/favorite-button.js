@@ -15,6 +15,7 @@ export default function FavoriteButton({ mealId, isFavorite }) {
   const [isPending, setIsPending] = useState(false);
 
   async function toggleFavorite() {
+    if (isPending) return;
     setIsPending(true);
 
     const user = await getCurrentUser();
@@ -52,7 +53,11 @@ export default function FavoriteButton({ mealId, isFavorite }) {
   return (
     <button title="Favorite" onClick={toggleFavorite} disabled={isPending}>
       <FavoriteIcon
-        className={`w-5 h-5 ${favorite ? "text-red-500" : "text-gray-400"}`}
+        className={`w-5 h-5 ${
+          favorite
+            ? "text-red-500 hover:text-red-700"
+            : "text-gray-400 hover:text-gray-600"
+        }`}
       />
     </button>
   );
