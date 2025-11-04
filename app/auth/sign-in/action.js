@@ -77,5 +77,7 @@ export default async function signInAction(prevState, formData) {
     maxAge: 60 * 60,
   });
 
-  redirect("/");
+  const from = formData.get("from");
+
+  redirect(from);
 }
