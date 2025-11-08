@@ -5,7 +5,6 @@ import {
   isNotEmpty,
   hasMinLength,
   isAtMostLength,
-  isProvided,
   isAtLeastSize,
   isUnderSizeLimit,
 } from "@/lib/validation";
@@ -20,12 +19,20 @@ export async function createExerciseAction(prevState, formData) {
 
   const errors = {};
 
+  const file = formData.get("image");
+  let imageBase64 = prevState?.data?.image || null;
+
+  if (file && file.size > 0) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    imageBase64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+  }
+
   const data = {
     title: formData.get("title"),
-    exercise_type: formData.get("exerciseType"),
-    muscle_group: formData.get("muscleGroup"),
+    exercise_type: formData.get("exercise_type"),
+    muscle_group: formData.get("muscle_group"),
     instructions: formData.get("instructions"),
-    image: formData.get("image"),
+    image: imageBase64,
   };
 
   if (!isNotEmpty(data.title)) {
@@ -50,14 +57,16 @@ export async function createExerciseAction(prevState, formData) {
     errors.instructions = "Instructions must be at least 20 characters";
   }
 
-  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-  if (!isProvided(data.image)) {
+  if (!imageBase64) {
     errors.image = "Image is required";
-  } else if (!isAtLeastSize(data.image.size, 1)) {
-    errors.image = "Image file is empty";
-  } else if (!isUnderSizeLimit(data.image.size, MAX_FILE_SIZE)) {
-    errors.image = "Image exceeds maximum size of 10MB";
+  } else if (file && file.size > 0) {
+    if (!isAtLeastSize(file.size, 1)) {
+      errors.image = "Image file is empty";
+    } else if (!isUnderSizeLimit(file.size, MAX_FILE_SIZE)) {
+      errors.image = "Image exceeds maximum size of 5MB";
+    }
   }
 
   if (Object.keys(errors).length > 0) {
@@ -77,13 +86,21 @@ export async function updateExerciseAction(prevState, formData, initialData) {
   const user = await getCurrentUser();
   const errors = {};
 
+  const file = formData.get("image") || initialData.image;
+  let imageBase64 = prevState?.data?.image || initialData.image;
+
+  if (file && file.size > 0) {
+    const buffer = Buffer.from(await file.arrayBuffer());
+    imageBase64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+  }
+
   const data = {
     id: formData.get("id"),
     title: formData.get("title"),
-    exercise_type: formData.get("exerciseType"),
-    muscle_group: formData.get("muscleGroup"),
+    exercise_type: formData.get("exercise_type"),
+    muscle_group: formData.get("muscle_group"),
     instructions: formData.get("instructions"),
-    image: formData.get("image"),
+    image: imageBase64,
   };
 
   if (!isNotEmpty(data.title)) {
@@ -95,11 +112,11 @@ export async function updateExerciseAction(prevState, formData, initialData) {
   }
 
   if (!isNotEmpty(data.exercise_type)) {
-    errors.exerciseType = "This field is required";
+    errors.exercise_type = "This field is required";
   }
 
   if (!isNotEmpty(data.muscle_group)) {
-    errors.muscleGroup = "This field is required";
+    errors.muscle_group = "This field is required";
   }
 
   if (!isNotEmpty(data.instructions)) {
@@ -108,16 +125,15 @@ export async function updateExerciseAction(prevState, formData, initialData) {
     errors.instructions = "Instructions must be at least 20 characters";
   }
 
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-  const imageChanged = formData.get("imageChanged") === "1";
+  const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-  if (imageChanged) {
-    if (!isProvided(data.image)) {
-      errors.image = "Image is required";
-    } else if (!isAtLeastSize(data.image.size, 1)) {
+  if (!imageBase64) {
+    errors.image = "Image is required";
+  } else if (file && file.size > 0) {
+    if (!isAtLeastSize(file.size, 1)) {
       errors.image = "Image file is empty";
-    } else if (!isUnderSizeLimit(data.image.size, MAX_FILE_SIZE)) {
-      errors.image = "Image exceeds maximum size of 10MB";
+    } else if (!isUnderSizeLimit(file.size, MAX_FILE_SIZE)) {
+      errors.image = "Image exceeds maximum size of 5MB";
     }
   }
 
@@ -129,13 +145,7 @@ export async function updateExerciseAction(prevState, formData, initialData) {
     };
   }
 
-  const payload = {
-    ...data,
-    imageToDelete: imageChanged ? initialData.image : undefined,
-    image: imageChanged ? data.image : undefined,
-  };
-
-  const updated = await updateExerciseByUserId(data.id, user.id, payload);
+  const updated = await updateExerciseByUserId(data.id, user.id, data);
   if (!updated) {
     return {
       ok: false,
