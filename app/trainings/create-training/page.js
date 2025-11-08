@@ -6,6 +6,7 @@ import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { Button } from "@/components/ui/button";
 import Modal from "@/components/ui/modal";
 import CreateExerciseCard from "@/components/trainings/exercises/create-exercise-card";
+import EditExerciseCard from "@/components/trainings/exercises/edit-exercise-card";
 import ExercisesTable from "@/components/trainings/exercises/exercises-table/exercises-table";
 import { createExercisesTableColumns } from "@/components/trainings/exercises/exercises-table/exercises-table-columns";
 import TrainingTable from "@/components/trainings/training-table/training-table";
@@ -217,7 +218,7 @@ export default function CreateTrainingPage() {
               setEditingExercise(null);
             }}
           >
-            <CreateExerciseCard
+            <EditExerciseCard
               onClose={() => {
                 setIsEditOpen(false);
                 setEditingExercise(null);
