@@ -9,20 +9,24 @@ import ImagePicker from "../../ui/image-picker";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createExerciseAction } from "@/app/trainings/create-training/actions";
+import { updateExerciseAction } from "@/app/trainings/create-training/actions";
 import ExerciseTypeDropdown from "./exercise-type-dropdown";
 import MuscleGroupDropdown from "./muscle-group-dropdown";
 import LoadingDots from "@/components/ui/loading-dots";
 
-export default function CreateExerciseCard({ onClose, onSuccess }) {
-  const [state, formAction, isPending] = useActionState(createExerciseAction, {
-    errors: null,
-    data: {},
-  });
+export default function EditExerciseCard({ onClose, initialData, onSuccess }) {
+  const [state, formAction, isPending] = useActionState(
+    (prevState, formData) =>
+      updateExerciseAction(prevState, formData, initialData),
+    {
+      errors: null,
+      data: {},
+    }
+  );
 
   useEffect(() => {
     if (state.ok) {
-      toast("Exercise has successfully been created!");
+      toast("Exercise has successfully been updated!");
       onClose();
       if (onSuccess) {
         onSuccess(state.data);
@@ -33,17 +37,21 @@ export default function CreateExerciseCard({ onClose, onSuccess }) {
   return (
     <Card className="w-full max-w-lg">
       <CardHeader>
-        <CardTitle>Add your exercise</CardTitle>
+        <CardTitle>Edit exercise</CardTitle>
       </CardHeader>
       <CardContent>
         <form className="flex flex-col gap-6" noValidate action={formAction}>
+          <input type="hidden" name="id" value={initialData.id} />
+
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
             <Input
               id="title"
               name="title"
               type="text"
-              defaultValue={state.data?.title || ""}
+              defaultValue={
+                state.errors?.title ? state.data.title : initialData?.title
+              }
               className={state.errors?.title && "border-destructive"}
             />
             {state.errors?.title && (
@@ -56,7 +64,9 @@ export default function CreateExerciseCard({ onClose, onSuccess }) {
               <Label>Exercise Type</Label>
               <ExerciseTypeDropdown
                 name="exercise_type"
-                defaultValue={state.data?.exercise_type}
+                defaultValue={
+                  initialData?.exercise_type || state.data?.exercise_type
+                }
                 className={state.errors?.exercise_type && "border-destructive"}
               />
               {state.errors?.exercise_type && (
@@ -69,7 +79,9 @@ export default function CreateExerciseCard({ onClose, onSuccess }) {
               <Label>Muscle Group</Label>
               <MuscleGroupDropdown
                 name="muscle_group"
-                defaultValue={state.data?.muscle_group}
+                defaultValue={
+                  initialData?.muscle_group || state.data?.muscle_group
+                }
                 className={state.errors?.muscle_group && "border-destructive"}
               />
               {state.errors?.muscle_group && (
@@ -86,7 +98,9 @@ export default function CreateExerciseCard({ onClose, onSuccess }) {
               state={state}
               maxChars={1000}
               maxVH={25}
-              defaultValue={state.data?.instructions || ""}
+              defaultValue={
+                initialData?.instructions || state.data?.instructions || ""
+              }
             >
               {state.errors?.instructions && (
                 <p className="text-xs text-destructive">
@@ -97,14 +111,14 @@ export default function CreateExerciseCard({ onClose, onSuccess }) {
           </div>
 
           <ImagePicker
+            defaultImage={state.data?.image || initialData?.image}
             label="Image"
             name="image"
             error={state.errors?.image}
-            defaultImage={state.data?.image}
           />
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending ? <LoadingDots /> : "Create Exercise"}
+            {isPending ? <LoadingDots /> : "Update Exercise"}
           </Button>
         </form>
       </CardContent>
