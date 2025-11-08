@@ -4,7 +4,9 @@ import FavoriteButton from "@/components/meals/favorite-button";
 import { getCurrentUser } from "@/lib/auth";
 import { getMeal } from "@/lib/repository/meals";
 import Image from "next/image";
+import EditIcon from "@mui/icons-material/Edit";
 import DeleteMealButton from "@/components/meals/delete-meal-button";
+import Link from "next/link";
 
 export default async function MealPage({ params }) {
   const { mealSlug } = await params;
@@ -19,6 +21,8 @@ export default async function MealPage({ params }) {
       </main>
     );
   }
+
+  const isOwner = user?.id === meal.user_id;
 
   return (
     <main className="flex flex-1 pt-[92px] p-6 bg-gray-50 justify-center">
@@ -50,8 +54,14 @@ export default async function MealPage({ params }) {
             </p>
             <div className="flex gap-4 justify-center lg:justify-start">
               <FavoriteButton mealId={meal.id} isFavorite={meal.is_favorite} />
-              {user?.id === meal.user_id && (
-                <DeleteMealButton mealId={meal.id} />
+              {isOwner && <DeleteMealButton mealId={meal.id} />}
+              {isOwner && (
+                <Link
+                  href={`${mealSlug}/edit`}
+                  className="hover:text-gray-700 cursor-default"
+                >
+                  <EditIcon />
+                </Link>
               )}
             </div>
           </div>
