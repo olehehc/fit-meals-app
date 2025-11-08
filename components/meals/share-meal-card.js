@@ -97,7 +97,12 @@ export default function ShareMealCard() {
               )}
             </TextAreaWithCounter>
           </div>
-          <ImagePicker label="Image" name="image" error={state.errors?.image} />
+          <ImagePicker
+            defaultImage={state.data?.image}
+            label="Image"
+            name="image"
+            error={state.errors?.image}
+          />
           <Button type="submit" className="w-full" disabled={isPending}>
             Share Meal
           </Button>
