@@ -11,19 +11,21 @@ export default async function TrainingsPage({ searchParams: rawSearchParams }) {
 
   const from = searchParams?.dateFrom ? new Date(searchParams.dateFrom) : null;
   const to = searchParams?.dateTo ? new Date(searchParams.dateTo) : null;
+  const status = searchParams?.status;
 
   const user = await getCurrentUser();
 
   const trainings = await getTrainingsByUserAndDateRange(
     user.id,
     formatDateToYMD(from),
-    formatDateToYMD(to)
+    formatDateToYMD(to),
+    status
   );
 
   return (
     <main className="pt-[68px] bg-gray-50 flex-1 flex justify-center">
       <div className="mx-auto flex flex-col lg:flex-row w-full">
-        <div className="flex flex-col p-6 justify-between items-start h-full bg-gray-100 rounded-r-3xl">
+        <div className="flex flex-col p-6 gap-6 items-start h-full bg-gray-100 rounded-r-3xl">
           <Button asChild className="w-auto">
             <Link href="/trainings/create-training">Add training</Link>
           </Button>
