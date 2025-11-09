@@ -3,7 +3,7 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 
 export const metadata = {
-  title: "FitMeals",
+  title: "StayFit",
   description: "A social platform for nutrition and workouts",
 };
 
@@ -19,8 +19,8 @@ export default function RootLayout({ children }) {
         />
         <MainHeader />
         {children}
-        <footer className="bg-gray-200 p-4 text-center">
-          © 2025 FitMeals. All rights reserved.
+        <footer className="bg-gray-200 p-4 text-center mt-auto">
+          © 2025 StayFit. Portfolio project. All rights reserved.
         </footer>
       </body>
     </html>
