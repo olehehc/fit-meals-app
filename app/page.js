@@ -91,18 +91,17 @@ export default async function Home() {
                 </ul>
               ) : (
                 <p className="text-gray-600 mb-4">
-                  You haven&rsquo;t added any meals yet. Start tracking what you
-                  eat!
+                  You haven&rsquo;t added any meals yet.
                 </p>
               )}
             </div>
 
             <div className="flex gap-3">
-              <Link href="/meals/my-meals">
-                <Button>My Meals</Button>
+              <Link href="/meals">
+                <Button>Browse Meals</Button>
               </Link>
-              <Link href="/meals/favorites">
-                <Button variant="outline">Favorites</Button>
+              <Link href="/meals/my-meals">
+                <Button variant="outline">My Meals</Button>
               </Link>
             </div>
           </Card>
