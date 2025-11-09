@@ -1,7 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { useSearchParams } from "next/navigation";
-import { addDays } from "date-fns";
+import { addDays, startOfDay } from "date-fns";
 
 export function AllDaysSwitch({ setDateRange }) {
   const searchParams = useSearchParams();
@@ -9,13 +9,13 @@ export function AllDaysSwitch({ setDateRange }) {
   const urlFrom = searchParams.get("dateFrom");
   const urlTo = searchParams.get("dateTo");
 
-  const checked = searchParams.size === 0 && urlFrom === null && urlTo === null;
+  const checked = urlFrom === null && urlTo === null;
 
   function handleChange(checked) {
     if (checked) {
       setDateRange({ from: null, to: null });
     } else {
-      const today = new Date();
+      const today = startOfDay(new Date());
       const nextWeek = addDays(today, 6);
       setDateRange({ from: today, to: nextWeek });
     }
