@@ -1,20 +1,19 @@
 "use client";
 
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { signOut } from "@/lib/auth";
 import LoadingDots from "../ui/loading-dots";
 
 export default function SignOutButton({ className }) {
   const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+  const pathname = usePathname();
 
   function handleLogout() {
     if (isPending) return;
     startTransition(async () => {
-      await signOut();
-      router.push("/");
+      await signOut(pathname);
     });
   }
 
