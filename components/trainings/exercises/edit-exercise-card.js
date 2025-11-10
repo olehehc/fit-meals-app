@@ -15,9 +15,14 @@ import MuscleGroupDropdown from "./muscle-group-dropdown";
 import LoadingDots from "@/components/ui/loading-dots";
 
 export default function EditExerciseCard({ onClose, initialData, onSuccess }) {
+  const [selectedImage, setSelectedImage] = useState(null);
   const [state, formAction, isPending] = useActionState(
-    (prevState, formData) =>
-      updateExerciseAction(prevState, formData, initialData),
+    async (prevState, formData) => {
+      if (selectedImage) {
+        formData.set("image", selectedImage);
+      }
+      return await updateExerciseAction(prevState, formData, initialData);
+    },
     {
       errors: null,
       data: {},
@@ -115,6 +120,7 @@ export default function EditExerciseCard({ onClose, initialData, onSuccess }) {
             label="Image"
             name="image"
             error={state.errors?.image}
+            onChange={setSelectedImage}
           />
 
           <Button type="submit" className="w-full" disabled={isPending}>
