@@ -6,19 +6,31 @@ import { deleteMealByUser } from "@/lib/repository/meals";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getCurrentUser } from "@/lib/auth";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 export default function DeleteMealButton({ mealId }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
 
   async function handleDeleteConfirmed() {
     try {
       setIsDeleting(true);
       const user = await getCurrentUser();
       await deleteMealByUser(mealId, user.id);
-      router.refresh();
+
+      if (pathname === "/meals") {
+        router.refresh();
+      } else if (
+        pathname.startsWith("/meals/") &&
+        pathname.split("/").length === 3
+      ) {
+        router.push("/meals");
+      } else {
+        router.refresh();
+      }
+
       toast("Meal has been deleted.");
     } catch (error) {
       toast(error?.message || "Error deleting meal");
