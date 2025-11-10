@@ -3,7 +3,7 @@ import { getCurrentUser } from "@/lib/auth";
 
 export async function GET() {
   const user = await getCurrentUser();
-  const exercises = getExercisesByUserId(user.id);
+  const exercises = await getExercisesByUserId(user.id);
 
   return Response.json(exercises);
 }
