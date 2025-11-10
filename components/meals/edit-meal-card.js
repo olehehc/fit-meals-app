@@ -1,31 +1,29 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import TextAreaWithCounter from "../ui/text-area-with-counter";
 import ImagePicker from "../ui/image-picker";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateMealAction } from "@/app/meals/[mealSlug]/edit/action";
 
 export default function EditMealCard({ initialData }) {
   const router = useRouter();
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const [state, formAction, isPending] = useActionState(
-    (prevState, formData) => updateMealAction(prevState, formData, initialData),
-    {
-      errors: null,
-      data: {},
-    }
+    async (prevState, formData) => {
+      if (selectedImage) {
+        formData.set("image", selectedImage);
+      }
+      return await updateMealAction(prevState, formData, initialData);
+    },
+    { errors: null, data: {} }
   );
 
   useEffect(() => {
@@ -43,7 +41,6 @@ export default function EditMealCard({ initialData }) {
       <CardContent>
         <form className="flex flex-col gap-6" noValidate action={formAction}>
           <input type="hidden" name="id" value={initialData.id} />
-
           <div className="grid gap-2">
             <Label htmlFor="title">Title</Label>
             <Input
@@ -110,6 +107,7 @@ export default function EditMealCard({ initialData }) {
             label="Image"
             name="image"
             error={state.errors?.image}
+            onChange={setSelectedImage}
           />
           <Button type="submit" className="w-full" disabled={isPending}>
             Edit Meal
