@@ -28,12 +28,8 @@ export default function SignUpCard() {
 
   useEffect(() => {
     if (state.ok) {
-      toast("Registration successful! Redirecting...");
-      const timer = setTimeout(() => {
-        router.push("/auth/sign-in");
-      }, 3000);
-
-      return () => clearTimeout(timer);
+      toast("Registration successful!");
+      router.push("/auth/sign-in");
     }
   }, [state.ok, router]);
 
