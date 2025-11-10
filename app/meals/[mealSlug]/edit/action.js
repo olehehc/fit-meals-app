@@ -14,8 +14,8 @@ export async function updateMealAction(prevState, formData, initialData) {
   const user = await getCurrentUser();
   const errors = {};
 
-  const file = formData.get("image") || initialData.image;
-  let imageBase64 = prevState?.data?.image || initialData.image;
+  const file = formData.get("image");
+  let imageBase64 = initialData.image;
 
   if (file && file.size > 0) {
     const buffer = Buffer.from(await file.arrayBuffer());
@@ -51,9 +51,7 @@ export async function updateMealAction(prevState, formData, initialData) {
 
   const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-  if (!imageBase64) {
-    errors.image = "Image is required";
-  } else if (file && file.size > 0) {
+  if (file && file.size > 0) {
     if (!isAtLeastSize(file.size, 1)) {
       errors.image = "Image file is empty";
     } else if (!isUnderSizeLimit(file.size, MAX_FILE_SIZE)) {
