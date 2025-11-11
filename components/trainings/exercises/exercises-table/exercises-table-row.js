@@ -18,7 +18,10 @@ export default function ExercisesTableRow({ row }) {
       className={`cursor-grab select-none ${isDragging ? "opacity-50" : ""}`}
     >
       {row.getVisibleCells().map((cell) => (
-        <TableCell key={cell.id} className="whitespace-normal break-words">
+        <TableCell
+          key={cell.id}
+          className="truncate whitespace-nowrap overflow-hidden"
+        >
           {flexRender(cell.column.columnDef.cell, cell.getContext())}
         </TableCell>
       ))}
