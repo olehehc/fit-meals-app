@@ -95,27 +95,34 @@ export default function TrainingSession({ training, userId }) {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-6">{trainingSession.title}</h1>
+      <h1 className="text-xl sm:text-2xl font-semibold mb-6 text-center">
+        {trainingSession.title}
+      </h1>
+
       <ExercisesList
         training={trainingSession}
         toggleComplete={toggleComplete}
         updateSet={updateSet}
       />
-      <div className="flex flex-col items-center gap-3 mt-6">
-        <Button onClick={handleCompleteTraining} disabled={isPending}>
+
+      <div className="flex flex-col items-center gap-3 mt-6 text-center">
+        <Button
+          onClick={handleCompleteTraining}
+          disabled={isPending}
+          className="w-full sm:w-auto"
+        >
           {isPending ? <LoadingDots /> : "Finish Training"}
         </Button>
+
         {completeTrainingWarning && (
-          <p className="text-red-600 text-sm text-center max-w-md">
+          <p className="text-red-600 text-sm max-w-sm">
             There are uncompleted sets. Please complete all sets and press
-            <span className="font-semibold"> Finish Training </span> button
-            again.
+            <span className="font-semibold"> Finish Training </span> again.
           </p>
         )}
+
         {errorMessage && (
-          <p className="text-red-600 text-sm text-center max-w-md">
-            ⚠️ {errorMessage}
-          </p>
+          <p className="text-red-600 text-sm max-w-sm">⚠️ {errorMessage}</p>
         )}
       </div>
     </div>
