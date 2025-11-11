@@ -20,7 +20,7 @@ export default function MobileNavigation({ user }) {
           aria-label="Open menu"
           className="text-white p-2 rounded-md hover:bg-gray-800 transition"
         >
-          <Menu size={24} />
+          <Menu size={20} />
         </button>
       </SheetTrigger>
 
