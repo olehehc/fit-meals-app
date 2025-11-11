@@ -22,7 +22,9 @@ export default function ClientFilters({
     to: null,
   });
 
-  const [statusValue, setStatusValue] = useState("all");
+  const [statusValue, setStatusValue] = useState(
+    searchParams.get("status") || "all"
+  );
 
   useEffect(() => {
     const todayLocal = startOfDay(new Date());
