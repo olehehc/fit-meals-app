@@ -8,7 +8,7 @@ export const createExercisesTableColumns = ({ onEditOpen, onDelete } = {}) => [
   { accessorKey: "exercise_type", header: "Exercise Type" },
   {
     id: "actions",
-    header: "",
+    header: "Actions",
     cell: ({ row }) => {
       const exercise = row.original;
       return (
