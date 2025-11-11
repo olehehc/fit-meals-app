@@ -36,7 +36,7 @@ export default function TrainingsList({ trainings }) {
       });
     } catch (error) {
       console.error(error);
-      alert("Error occurred while deleting. Try again later."); // TODO replace default alert with custom alert
+      toast("Error occurred while deleting. Try again later.");
     } finally {
       setIsDeleting(false);
       setTrainingSlugToDelete(null);
@@ -56,7 +56,7 @@ export default function TrainingsList({ trainings }) {
         isPending={isDeleting}
       />
 
-      <ul className="space-y-4">
+      <ul className="space-y-4 w-full">
         {trainings.map((training) => (
           <li key={training.id}>
             <TrainingItem
