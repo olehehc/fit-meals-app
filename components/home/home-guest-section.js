@@ -36,17 +36,19 @@ export default function HomeGuestSection() {
           analyze results and browse meals — all in one place.
         </p>
 
-        <div className="flex justify-center gap-4">
+        <div className="flex flex-col sm:flex-row justify-center gap-3 sm:gap-4 px-4 sm:px-6">
           <Link href="/auth/sign-up">
-            <Button size="lg">Get Started</Button>
+            <Button size="lg" className="w-full sm:w-auto">
+              Get Started
+            </Button>
           </Link>
           <Link href="/auth/sign-in">
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" className="w-full sm:w-auto">
               Sign In
             </Button>
           </Link>
           <Link href="/meals">
-            <Button size="lg" variant="ghost">
+            <Button size="lg" variant="ghost" className="w-full sm:w-auto">
               Explore Meals
             </Button>
           </Link>
