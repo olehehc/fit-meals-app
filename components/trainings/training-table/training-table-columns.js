@@ -1,6 +1,7 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
+import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 
@@ -71,7 +72,12 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const repsValues = sets.map((set) => Number(set.reps));
         const sum = repsValues.reduce((acc, val) => acc + val, 0);
 
-        return <span>{sum}</span>;
+        return (
+          <div className="relative w-24 min-w-0">
+            <span className="px-3 block max-w-[80px] truncate">{sum}</span>
+            <span className="absolute inset-y-0 right-2 flex items-center text-sm pointer-events-none"></span>
+          </div>
+        );
       },
     },
     {
@@ -85,7 +91,16 @@ export default function getTrainingTableColumns(setRows, onDelete) {
           (acc, set) => acc + Number(set.reps) * Number(set.weight),
           0
         );
-        return <span>{Math.round(volume * 10) / 10} kg</span>;
+        return (
+          <div className="relative w-24 min-w-0">
+            <span className="px-3 block max-w-[80px] truncate">
+              {Math.round(volume * 10) / 10}
+            </span>
+            <span className="absolute inset-y-0 right-2 flex items-center text-sm pointer-events-none">
+              kg
+            </span>
+          </div>
+        );
       },
     },
     {
@@ -98,7 +113,14 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const restPeriodValues = sets.map((set) => Number(set.rest_period));
         const sum = restPeriodValues.reduce((acc, val) => acc + val, 0);
 
-        return <span>{sum} min</span>;
+        return (
+          <div className="relative w-24 min-w-0">
+            <span className="px-3 block max-w-[80px] truncate">{sum}</span>
+            <span className="absolute inset-y-0 right-2 flex items-center text-sm pointer-events-none">
+              min
+            </span>
+          </div>
+        );
       },
     },
     {
