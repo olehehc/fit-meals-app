@@ -8,10 +8,10 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from "../ui/pagination";
+} from "./pagination";
 import { getPageNumbers } from "@/lib/utils";
 
-export default function MealsPagination({
+export default function AppPagination({
   currentPage,
   totalPages,
   onPageChange,
