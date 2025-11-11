@@ -25,7 +25,7 @@ export default function TrainingsSidebar({ from, to }) {
 
   return (
     <div className="w-full lg:w-auto">
-      <div className="p-4 flex justify-between items-center bg-gray-100 lg:hidden">
+      <div className="fixed top-[68px] left-0 w-full z-50 bg-gray-100 p-4 flex justify-between items-center lg:hidden shadow-md">
         <Button asChild size="sm">
           <Link href="/trainings/create-training">Add training</Link>
         </Button>
