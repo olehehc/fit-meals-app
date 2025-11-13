@@ -1,7 +1,6 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import RemoveIcon from "@mui/icons-material/Remove";
 import AddIcon from "@mui/icons-material/Add";
-import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
 
@@ -54,7 +53,6 @@ export default function getTrainingTableColumns(setRows, onDelete) {
             >
               <RemoveIcon fontSize="small" />
             </Button>
-            <span className="px-3 min-w-[2rem] text-center">{setsCount}</span>
             <Button variant="ghost" size="icon" onClick={addSet}>
               <AddIcon fontSize="small" />
             </Button>
@@ -73,7 +71,7 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const sum = repsValues.reduce((acc, val) => acc + val, 0);
 
         return (
-          <div className="relative w-24 min-w-0">
+          <div className="relative w-20 min-w-0">
             <span className="px-3 block max-w-[80px] truncate">{sum}</span>
             <span className="absolute inset-y-0 right-2 flex items-center text-sm pointer-events-none"></span>
           </div>
@@ -92,7 +90,7 @@ export default function getTrainingTableColumns(setRows, onDelete) {
           0
         );
         return (
-          <div className="relative w-24 min-w-0">
+          <div className="relative w-20 min-w-0">
             <span className="px-3 block max-w-[80px] truncate">
               {Math.round(volume * 10) / 10}
             </span>
@@ -114,7 +112,7 @@ export default function getTrainingTableColumns(setRows, onDelete) {
         const sum = restPeriodValues.reduce((acc, val) => acc + val, 0);
 
         return (
-          <div className="relative w-24 min-w-0">
+          <div className="relative w-20 min-w-0">
             <span className="px-3 block max-w-[80px] truncate">{sum}</span>
             <span className="absolute inset-y-0 right-2 flex items-center text-sm pointer-events-none">
               min
