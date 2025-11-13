@@ -10,6 +10,7 @@ import SetsList from "./sets-list";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import InfoIcon from "@mui/icons-material/Info";
+import SetsProgress from "@/components/ui/sets-progress";
 
 export default function ExerciseItem({
   title,
@@ -49,7 +50,7 @@ export default function ExerciseItem({
       )}
 
       <div className="bg-white rounded-md border shadow-sm p-4 space-y-3 sm:space-y-4 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto">
-        <div className="flex items-start justify-between gap-2 sm:gap-3 sm:flex-nowrap">
+        <div className="flex items-center justify-between gap-2 sm:gap-3 sm:flex-nowrap">
           <div className="flex items-start gap-2 sm:gap-3 min-w-0">
             <Button
               title={isExpanded ? "Hide sets" : "Show sets"}
@@ -67,9 +68,21 @@ export default function ExerciseItem({
             </Button>
 
             <div className="min-w-0">
-              <h2 className="font-semibold text-base sm:text-lg md:text-xl truncate">
-                {title}
-              </h2>
+              <div className="flex flex-row gap-1 items-center">
+                <h2 className="font-semibold text-base sm:text-lg md:text-xl truncate">
+                  {title}
+                </h2>
+                <Button
+                  variant="iconGhost"
+                  size="icon"
+                  onClick={() => setIsExerciseModalOpen(true)}
+                  aria-label={`Open ${title} info`}
+                  className="p-2 sm:p-1"
+                >
+                  <InfoIcon fontSize="small" />
+                </Button>
+              </div>
+
               <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs sm:text-sm text-gray-500">
                 <span>
                   <span className="font-medium">Type:</span> {exerciseType}
@@ -81,15 +94,10 @@ export default function ExerciseItem({
             </div>
           </div>
 
-          <Button
-            variant="iconGhost"
-            size="icon"
-            onClick={() => setIsExerciseModalOpen(true)}
-            aria-label={`Open ${title} info`}
-            className="p-2 sm:p-1"
-          >
-            <InfoIcon fontSize="small" />
-          </Button>
+          <SetsProgress
+            done={sets.filter((s) => s.completed).length}
+            total={sets.length}
+          />
         </div>
 
         <div
