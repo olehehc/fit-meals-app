@@ -7,12 +7,16 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function ActionsCell({ exercise, onEditOpen, onDelete }) {
+export default function ActionsCell({
+  exercise,
+  onViewOpen,
+  onEditOpen,
+  onDelete,
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,7 +36,12 @@ export default function ActionsCell({ exercise, onEditOpen, onDelete }) {
         onPointerDown={(e) => e.stopPropagation()}
         onClick={(e) => e.stopPropagation()}
       >
-        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={() => onViewOpen?.(exercise)}
+        >
+          Open
+        </DropdownMenuItem>
 
         <DropdownMenuItem
           onPointerDown={(e) => e.stopPropagation()}
@@ -46,6 +55,7 @@ export default function ActionsCell({ exercise, onEditOpen, onDelete }) {
         <DropdownMenuItem
           onPointerDown={(e) => e.stopPropagation()}
           onClick={() => onDelete?.(exercise)}
+          variant="destructive"
         >
           Delete
         </DropdownMenuItem>
