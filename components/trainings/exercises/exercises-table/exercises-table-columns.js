@@ -2,7 +2,11 @@
 
 import ActionsCell from "./actions-cell";
 
-export const createExercisesTableColumns = ({ onEditOpen, onDelete } = {}) => [
+export const createExercisesTableColumns = ({
+  onEditOpen,
+  onDelete,
+  onViewOpen,
+} = {}) => [
   { accessorKey: "title", header: "Title" },
   { accessorKey: "muscle_group", header: "Muscle Group" },
   { accessorKey: "exercise_type", header: "Exercise Type" },
@@ -16,6 +20,7 @@ export const createExercisesTableColumns = ({ onEditOpen, onDelete } = {}) => [
           exercise={exercise}
           onEditOpen={onEditOpen}
           onDelete={onDelete}
+          onViewOpen={onViewOpen}
         />
       );
     },
