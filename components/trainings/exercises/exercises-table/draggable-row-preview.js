@@ -14,13 +14,13 @@ export default function DraggableRowPreview({
       className="pointer-events-none z-50"
       style={tableWidth ? { width: `${tableWidth}px` } : undefined}
     >
-      <Table className="w-full">
+      <Table className="min-w-full table-fixed rounded-t-md overflow-hidden">
         <TableBody>
           <TableRow className="bg-white shadow-lg">
             {row.getVisibleCells().map((cell, idx) => (
               <TableCell
                 key={cell.id}
-                className="whitespace-normal break-words"
+                className="truncate whitespace-nowrap overflow-hidden"
                 style={
                   cellWidths && typeof cellWidths[idx] === "number"
                     ? { width: `${cellWidths[idx]}px` }
