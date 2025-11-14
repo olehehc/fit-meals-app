@@ -15,7 +15,12 @@ import {
 import ExercisesTableRow from "./exercises-table-row";
 import LoadingDots from "@/components/ui/loading-dots";
 
-export default function ExercisesTable({ columns, data, isLoading = false }) {
+export default function ExercisesTable({
+  columns,
+  data,
+  isLoading = false,
+  addedExercises,
+}) {
   const table = useReactTable({
     data,
     columns,
@@ -62,18 +67,28 @@ export default function ExercisesTable({ columns, data, isLoading = false }) {
                   </TableCell>
                 </TableRow>
               ) : table.getRowModel().rows.length ? (
-                table
-                  .getRowModel()
-                  .rows.map((row) => (
-                    <ExercisesTableRow key={row.id} row={row} />
-                  ))
+                table.getRowModel().rows.map((row) => {
+                  return (
+                    <ExercisesTableRow
+                      key={row.id}
+                      row={row}
+                      className={
+                        addedExercises.find(
+                          (exercise) => exercise.id === row.original.id
+                        )
+                          ? "bg-green-200"
+                          : ""
+                      }
+                    />
+                  );
+                })
               ) : (
                 <TableRow>
                   <TableCell
                     colSpan={headerColsCount}
                     className="text-center py-6"
                   >
-                    No results.
+                    Lack of exercises
                   </TableCell>
                 </TableRow>
               )}
